@@ -32,7 +32,6 @@ def get_zip_avatars_(persons: list, name):
 
     with ZipFile(local_file_zip, "w") as zip:
         for root, dirs, files in os.walk(local_file_path):
-            print(root, dirs, files)
             for file in files:
                 zip.write(os.path.join(root, file), file)
 

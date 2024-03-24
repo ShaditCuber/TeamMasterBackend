@@ -8,12 +8,11 @@ from util.util import (
     centiseconds_to_minutes_seconds,
 )
 import os
-
+from PIL import Image
 
 
 class SCORESHEET(FPDF):
     PATH_FONTS = os.path.join(os.path.dirname(__file__), "fonts")
-    print(PATH_FONTS)
     FONTS = {
         "arial-unicode-ms": [
             "Arial-UnicodeMS",
@@ -141,8 +140,31 @@ class SCORESHEET(FPDF):
         :type y: int
         """
         if self.water_mark_path:
-            watermark_width = 80
-            self.image(self.water_mark_path, x=x + 10, y=y + 50, w=watermark_width)
+            max_width = 105
+            max_height = 130
+            watermark = Image.open(self.water_mark_path)
+
+            # # Obtener el tamaño de la marca de agua
+            # watermark_width, watermark_height = watermark.size
+
+            # # Calcular el factor de escala para ajustar la marca de agua
+            # scale_factor_width = max_width / watermark_width
+            # scale_factor_height = max_height / watermark_height
+
+            # # Escoger el factor de escala más pequeño para asegurar que la marca de agua quepa completamente
+            # scale_factor = min(scale_factor_width, scale_factor_height)
+
+            # # Escalar la marca de agua
+            # new_width = int(watermark_width * scale_factor)
+            # new_height = int(watermark_height * scale_factor)
+            # watermark = watermark.resize((new_width, new_height), Image.BILINEAR)
+
+            # # Calcular la posición para centrar la marca de agua en la tarjeta
+            # watermark_x = (max_width - new_width) // 2
+            # watermark_y = (max_height - new_height) // 2
+
+            # Pegar la marca de agua en la tarjeta
+            self.image(watermark, x + 10, y + 50, 80)
 
     def _add_header(self, x: int, y: int):
         """Add the header to the card with the tournament name

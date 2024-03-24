@@ -141,7 +141,6 @@ def generateGroupsBySpeed(
 
 @router.post("/generateGroups")
 def generate_groups(wcif: dict, data: dict):
-    print(data)
     new_competitors = []
     criteria = data["criteria"]
 
@@ -297,7 +296,7 @@ def convert_to_watermark(input_image_path, output_image_path):
 
 
 @router.post("/generateScoresheet")
-async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(...)):
+async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(None)):
     wcif = json.loads(wcif)
     tournament_id = wcif["id"]
     tournament_name = wcif["name"]
@@ -307,10 +306,11 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(..
     competitors = get_competitors(wcif)
     events = get_events(wcif)
     cuttof = get_limit_and_cuttoff(wcif)
-
-    image_path = await save_uploaded_file(image)
-
-    convert_to_watermark(image_path, image_path)
+    print(image)
+    image_path = None
+    if image:
+        image_path = await save_uploaded_file(image)
+        convert_to_watermark(image_path, image_path)
 
     scoresheet = SCORESHEET(
         lang=lang,
