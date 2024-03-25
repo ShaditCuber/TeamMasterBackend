@@ -180,7 +180,7 @@ def generate_groups(wcif: dict, data: dict):
 
 def generate_pdf_groups(wcif):
     tournament_name = wcif["name"]
-
+    lang = wcif["lang"]
     eventos = {}
 
     for participante in wcif["persons"]:
@@ -200,7 +200,7 @@ def generate_pdf_groups(wcif):
     for evento_id, grupos in eventos.items():
         eventos[evento_id] = dict(sorted(grupos.items(), key=lambda x: int(x[0])))
 
-    groups = GROUPS(tournament_name=tournament_name)
+    groups = GROUPS(tournament_name=tournament_name, lang=lang)
 
     groups.add_page()
     groups.agregar_tabla(eventos)

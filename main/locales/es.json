@@ -24,5 +24,7 @@
     "judge": "Juez",
     "competitor": "Competidor",
     "continue_if": "Continua si 1 o 2",
-    "if": "Si"
+    "if": "Si",
+    "event": "Evento",
+    "page": "Página"
 }

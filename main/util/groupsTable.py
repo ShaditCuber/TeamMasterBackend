@@ -1,11 +1,13 @@
 from fpdf import FPDF
+from util.util import tranlate_text
 
 
 class GROUPS(FPDF):
 
-    def __init__(self, tournament_name):
+    def __init__(self, tournament_name, lang="es"):
         super().__init__()
         self.tournament_name = tournament_name
+        self.lang = lang
 
     def header(self):
         self.set_font("Arial", "B", 12)
@@ -15,7 +17,9 @@ class GROUPS(FPDF):
     def footer(self):
         self.set_y(-15)
         self.set_font("Arial", "I", 8)
-        self.cell(0, 10, f"Página {self.page_no()}", 0, 0, "C")
+        self.cell(
+            0, 10, f"{tranlate_text('page',self.lang)} {self.page_no()}", 0, 0, "C"
+        )
 
     def agregar_tabla(self, eventos):
 
@@ -23,14 +27,23 @@ class GROUPS(FPDF):
             if self.get_y() >= 210:
                 self.add_page()
             self.set_font("Arial", "B", 16)
-            self.cell(0, 10, f"Evento: {evento}", 0, 1, "C")
+            self.cell(
+                0,
+                10,
+                f"{tranlate_text('event',self.lang)}: {tranlate_text(evento,self.lang)}",
+                0,
+                1,
+                "C",
+            )
             self.ln(5)
 
             for grupo, participantes in grupos.items():
                 if self.get_y() >= 210:
                     self.add_page()
                 self.set_font("Arial", "B", 12)
-                self.cell(0, 10, f"Grupo {grupo}:", 0, 1, "C")
+                self.cell(
+                    0, 10, f"{tranlate_text('group',self.lang)} {grupo}:", 0, 1, "C"
+                )
                 self.ln(5)
 
                 self.crear_tabla(participantes)
@@ -56,7 +69,3 @@ class GROUPS(FPDF):
                 ln=True,
                 align="C",
             )
-            
-
-
-
