@@ -306,7 +306,6 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
     competitors = get_competitors(wcif)
     events = get_events(wcif)
     cuttof = get_limit_and_cuttoff(wcif)
-    print(image)
     image_path = None
     if image:
         image_path = await save_uploaded_file(image)
@@ -337,6 +336,7 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
                 group_num=person_group,
                 total_groups=groups[event_id],
                 competitor_counter=competitor_counter,
+                registrant_id=person["registrantId"],
                 wca_id=person["wcaId"],
             )
 

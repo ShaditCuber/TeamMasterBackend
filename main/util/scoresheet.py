@@ -76,6 +76,7 @@ class SCORESHEET(FPDF):
         group_num: int,
         total_groups: int,
         competitor_counter: int,
+        registrant_id: int = None,
         wca_id: str = None,
         with_cuttof: bool = True,
     ):
@@ -103,11 +104,22 @@ class SCORESHEET(FPDF):
         self._add_header(x, y)
         self._add_category_info(x, category)
         self._add_round_info(x, group_num, total_groups)
-        self._add_competitor_info(x, competitor_name, wca_id, self.add_wca_id)
+        self._add_competitor_info(
+            x=x,
+            competitor_name=competitor_name,
+            registrant_id=registrant_id,
+            wca_id=wca_id,
+            with_wca_id=self.add_wca_id,
+        )
         self._add_table(x, y, category, with_cuttof)
 
     def draw_centered_text(
-        self, x: int, text: str, max_width: int = 210, border: bool = False
+        self,
+        x: int,
+        text: str = None,
+        max_width: int = 210,
+        border: bool = False,
+        array_text: list = None,
     ):
         """Draw a centered text in the card, with the option to add a border
 
@@ -120,6 +132,17 @@ class SCORESHEET(FPDF):
         :param border: If the text should have a border, defaults to False
         :type border: bool, optional
         """
+
+        if array_text:
+            self.set_x(x)
+            for text in array_text:
+                text_width = self.get_string_width(text) + 2
+                start_x = x + (text["max_width"] - text_width) / 2
+                self.set_x(start_x)
+                border = 1 if text["border"] else 0
+                widht = text["max_width"] if text["border"] else text_width
+                self.cell(widht, 10, text["text"], border, 1, "C")
+
         if max_width == 210:
             total_width = ((x + max_width) - x) / 2
             text_width = self.get_string_width(text) + 2
@@ -216,6 +239,7 @@ class SCORESHEET(FPDF):
         self,
         x: int,
         competitor_name: str,
+        registrant_id: str = None,
         wca_id: str = "",
         with_wca_id: bool = False,
     ):
@@ -230,10 +254,11 @@ class SCORESHEET(FPDF):
         :param with_wca_id: If the wca_id should be added to the card, defaults to False
         :type with_wca_id: bool, optional
         """
+
         self.set_font("Arial-UnicodeMS", "", self.FONT_SIZE_SMALL)
-        name_competidor_wca = competitor_name
+        name_competidor_wca = f"| {registrant_id} |        {competitor_name}"
         if with_wca_id and wca_id:
-            name_competidor_wca = f"{competitor_name} | {wca_id}"
+            name_competidor_wca = f"{name_competidor_wca}        | {wca_id}"
 
         self.draw_centered_text(
             x=x, text=name_competidor_wca, max_width=105, border=True
