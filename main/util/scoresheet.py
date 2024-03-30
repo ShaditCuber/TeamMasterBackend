@@ -257,6 +257,10 @@ class SCORESHEET(FPDF):
 
         self.set_font("Arial-UnicodeMS", "", self.FONT_SIZE_SMALL)
         name_competidor_wca = f"| {registrant_id} |        {competitor_name}"
+
+        if competitor_name == "":
+            name_competidor_wca = f""
+
         if with_wca_id and wca_id:
             name_competidor_wca = f"{name_competidor_wca}        | {wca_id}"
 

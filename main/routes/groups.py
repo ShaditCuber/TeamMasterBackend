@@ -349,7 +349,8 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
     empty_pdf = SCORESHEET(
         lang=lang,
         tournament_name=tournament_name,
-        cuttof=cuttof,
+        cuttof=cuttof, 
+        water_mark_path=image_path,
     )
 
     counter_empty = 0
