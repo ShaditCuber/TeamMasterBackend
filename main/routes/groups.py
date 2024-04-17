@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Form
+from fpdf import FPDF
 from datetime import datetime
 from util.util import get_competitors, get_events, get_limit_and_cuttoff
 from util.scoresheet import SCORESHEET
@@ -219,6 +220,49 @@ def generate_pdf_groups(wcif):
     return f"{BASE}/Groups-{tournament_name}.pdf"
 
 
+def generate_name_and_id(wcif):
+    tournament_name = wcif["name"]
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, f"{tournament_name}", 0, 1, "C")
+    pdf.ln(10)
+
+    # Crear tabla para los participantes
+    pdf.set_font("Arial", "", 10)
+    col_widths = [30, 80, 50]  # Anchuras de las columnas
+    header = ["ID", "Nombre", "WCA ID"]  # Encabezados de las columnas
+    data = [header]  # Inicializar los datos con el encabezado
+
+    for person in wcif["persons"]:
+        wca_id = person.get("wcaId") if person.get("wcaId") != None else ""
+        data.append([person["registrantId"], person["name"], wca_id])
+
+    data = sorted(data[1:], key=lambda x: x[0])
+
+    # Agregar la tabla al PDF
+    for row in data:
+        for col, width in zip(row, col_widths):
+            pdf.cell(width, 10, str(col), border=1)
+        pdf.ln()
+
+    pdf.output(f"/tmp/Names-{tournament_name}.pdf")
+
+    # Subir el archivo al almacenamiento S3
+    s3 = boto3.client("s3")
+    s3.upload_file(
+        f"/tmp/Names-{tournament_name}.pdf",
+        "avatars-images",
+        f"Names-{tournament_name}.pdf",
+    )
+
+    # Eliminar el archivo temporal
+    os.remove(f"/tmp/Names-{tournament_name}.pdf")
+
+    return f"{BASE}/Names-{tournament_name}.pdf"
+
+
 def generate_csv(wcif):
     persons = wcif["persons"]
     colums = ["ID", "Name", "id_wca", "birthdate", "age"]
@@ -349,7 +393,7 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
     empty_pdf = SCORESHEET(
         lang=lang,
         tournament_name=tournament_name,
-        cuttof=cuttof, 
+        cuttof=cuttof,
         water_mark_path=image_path,
     )
 
@@ -393,4 +437,5 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
         "emptyScoreCard": f"{BASE}/Empty-ScoreCard-{tournament_name}.pdf",
         "groupsPDF": generate_pdf_groups(wcif),
         "groupsCSV": generate_csv(wcif),
+        "namesPDF": generate_name_and_id(wcif),
     }
