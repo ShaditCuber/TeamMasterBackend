@@ -27,7 +27,7 @@ class SCORESHEET(FPDF):
     FONT_SIZE_MSMALL = 10
     FONT_SIZE_SMALL = 8
 
-    POSITIONS = [(0, 0), (105, 0), (0, 130), (105, 130)]
+    POSITIONS = [(0, 0), (105, 0), (0, 140), (105, 140)]
 
     def __init__(
         self,
@@ -49,6 +49,7 @@ class SCORESHEET(FPDF):
         :type tournament_name: str, optional
         """
         super().__init__()
+        self.set_auto_page_break(auto=False, margin=0)
         self.lang = lang
         self.water_mark_path = water_mark_path
         self.cuttof = cuttof
@@ -100,6 +101,12 @@ class SCORESHEET(FPDF):
         if competitor_counter % 4 == 0:
             self.add_page()
         x, y = self.get_competitor_position(competitor_counter)
+        # print(x,'Posicion x')
+        # print(y,'Posicion y')
+        # # CUANDO NO SEA 3X3 DARLE 10 MAS DE Y, y si no es las pos
+        # if category != "333" and y != 0:
+        #     self.add_page()
+        #     y += 10
         self._add_watermark(x, y)
         self._add_header(x, y)
         self._add_category_info(x, category)
