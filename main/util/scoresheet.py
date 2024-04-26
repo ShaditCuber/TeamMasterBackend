@@ -101,12 +101,6 @@ class SCORESHEET(FPDF):
         if competitor_counter % 4 == 0:
             self.add_page()
         x, y = self.get_competitor_position(competitor_counter)
-        # print(x,'Posicion x')
-        # print(y,'Posicion y')
-        # # CUANDO NO SEA 3X3 DARLE 10 MAS DE Y, y si no es las pos
-        # if category != "333" and y != 0:
-        #     self.add_page()
-        #     y += 10
         self._add_watermark(x, y)
         self._add_header(x, y)
         self._add_category_info(x, category)
@@ -170,31 +164,14 @@ class SCORESHEET(FPDF):
         :type y: int
         """
         if self.water_mark_path:
-            max_width = 105
-            max_height = 130
             watermark = Image.open(self.water_mark_path)
-
-            # # Obtener el tamaño de la marca de agua
-            # watermark_width, watermark_height = watermark.size
-
-            # # Calcular el factor de escala para ajustar la marca de agua
-            # scale_factor_width = max_width / watermark_width
-            # scale_factor_height = max_height / watermark_height
-
-            # # Escoger el factor de escala más pequeño para asegurar que la marca de agua quepa completamente
-            # scale_factor = min(scale_factor_width, scale_factor_height)
-
-            # # Escalar la marca de agua
-            # new_width = int(watermark_width * scale_factor)
-            # new_height = int(watermark_height * scale_factor)
-            # watermark = watermark.resize((new_width, new_height), Image.BILINEAR)
-
-            # # Calcular la posición para centrar la marca de agua en la tarjeta
-            # watermark_x = (max_width - new_width) // 2
-            # watermark_y = (max_height - new_height) // 2
 
             # Pegar la marca de agua en la tarjeta
             self.image(watermark, x + 10, y + 50, 80)
+
+        # Dejar marca de agua en la esqquina superior izquierda de la tarjeta
+        team_master = Image.open(os.path.join("const", "teamMaster.png"))
+        self.image(team_master, x - 5, y - 5, 20)
 
     def _add_header(self, x: int, y: int):
         """Add the header to the card with the tournament name
