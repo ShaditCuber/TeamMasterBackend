@@ -27,7 +27,8 @@ class SCORESHEET(FPDF):
     FONT_SIZE_MSMALL = 10
     FONT_SIZE_SMALL = 8
 
-    POSITIONS = [(0, 0), (105, 0), (0, 140), (105, 140)]
+    # POSITIONS = [(0, 0), (105, 0), (0, 140), (105, 140)]
+    POSITIONS = [(0, 0), (111, 0), (0, 140), (111, 140)]
 
     def __init__(
         self,
@@ -48,7 +49,7 @@ class SCORESHEET(FPDF):
         :param tournament_name: The name of the tournament, defaults to None
         :type tournament_name: str, optional
         """
-        super().__init__()
+        super().__init__(format="letter")
         self.set_auto_page_break(auto=False, margin=0)
         self.lang = lang
         self.water_mark_path = water_mark_path
@@ -171,7 +172,7 @@ class SCORESHEET(FPDF):
 
         # Dejar marca de agua en la esqquina superior izquierda de la tarjeta
         team_master = Image.open(os.path.join("const", "teamMaster.png"))
-        self.image(team_master, x - 5, y - 5, 20)
+        self.image(team_master, x - 7, y - 7, 30)
 
     def _add_header(self, x: int, y: int):
         """Add the header to the card with the tournament name
