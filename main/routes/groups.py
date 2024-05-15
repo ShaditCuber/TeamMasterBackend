@@ -225,26 +225,28 @@ def generate_name_and_id(wcif):
 
     pdf = FPDF()
     pdf.add_page()
+    team_master = Image.open(os.path.join("const", "teamMaster.png"))
+    pdf.image(team_master, 3, 3, 30)
     pdf.set_font("Arial", "B", 16)
     pdf.cell(200, 10, f"{tournament_name}", 0, 1, "C")
     pdf.ln(10)
 
     # Crear tabla para los participantes
     pdf.set_font("Arial", "", 10)
-    col_widths = [30, 80, 50]  # Anchuras de las columnas
-    header = ["ID", "Nombre", "WCA ID"]  # Encabezados de las columnas
+    col_widths = [30, 80, 50,30]  # Anchuras de las columnas
+    header = ["ID", "Nombre", "WCA ID","Check"]  # Encabezados de las columnas
     data = [header]  # Inicializar los datos con el encabezado
 
     for person in wcif["persons"]:
         wca_id = person.get("wcaId") if person.get("wcaId") != None else ""
-        data.append([person["registrantId"], person["name"], wca_id])
+        data.append([person["registrantId"], person["name"], wca_id," "])
 
     data = sorted(data[1:], key=lambda x: x[0])
 
     # Agregar la tabla al PDF
     for row in data:
         for col, width in zip(row, col_widths):
-            pdf.cell(width, 10, str(col), border=1)
+            pdf.cell(width, 10, str(col), border=1, align="C")
         pdf.ln()
 
     pdf.output(f"/tmp/Names-{tournament_name}.pdf")
@@ -332,8 +334,8 @@ def convert_to_watermark(input_image_path, output_image_path):
         for y in range(result.height):
             gray = grayscale.getpixel((x, y))
             result.putpixel(
-                (x, y), (gray, gray, gray, 35)
-            )  # 60 es el nivel de opacidad
+                (x, y), (gray, gray, gray, 40)
+            )  # 40 es el nivel de opacidad
 
     # Guardar la imagen resultante
     result.save(output_image_path)
