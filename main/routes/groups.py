@@ -1,13 +1,9 @@
 from fastapi import APIRouter, UploadFile, File, Form
-from fpdf import FPDF
 from datetime import datetime
-from util.util import get_competitors, get_events, get_limit_and_cuttoff
-from util.scoresheet import SCORESHEET
-from util.groupsTable import GROUPS
-import boto3
+from util.util import get_competitors, get_events, get_limit_and_cuttoff, upload_to_s3
+from util.pdf import ScoreCard, Groups, NamesAndIds
 import os
 import json
-
 import random
 
 router = APIRouter()
@@ -181,6 +177,7 @@ def generate_groups(wcif: dict, data: dict):
 
 def generate_pdf_groups(wcif):
     tournament_name = wcif["name"]
+    tournament_id = wcif["id"]
     lang = wcif["lang"]
     eventos = {}
 
@@ -201,68 +198,24 @@ def generate_pdf_groups(wcif):
     for evento_id, grupos in eventos.items():
         eventos[evento_id] = dict(sorted(grupos.items(), key=lambda x: int(x[0])))
 
-    groups = GROUPS(tournament_name=tournament_name, lang=lang)
+    groups = Groups(tournament_name=tournament_name, lang=lang)
 
     groups.add_page()
     groups.agregar_tabla(eventos)
-    groups.output(f"/tmp/Groups-{tournament_name}.pdf")
 
-    s3 = boto3.client("s3")
+    name_file = f"Groups-{tournament_id}.pdf"
 
-    s3.upload_file(
-        f"/tmp/Groups-{tournament_name}.pdf",
-        "avatars-images",
-        f"Groups-{tournament_name}.pdf",
-    )
-
-    os.remove(f"/tmp/Groups-{tournament_name}.pdf")
-
-    return f"{BASE}/Groups-{tournament_name}.pdf"
+    return upload_to_s3(name_file=name_file, constructor=groups)
 
 
 def generate_name_and_id(wcif):
-    tournament_name = wcif["name"]
+    name_and_ids = NamesAndIds(wcif=wcif)
 
-    pdf = FPDF()
-    pdf.add_page()
-    team_master = Image.open(os.path.join("const", "teamMaster.png"))
-    pdf.image(team_master, 3, 3, 30)
-    pdf.set_font("Arial", "B", 16)
-    pdf.cell(200, 10, f"{tournament_name}", 0, 1, "C")
-    pdf.ln(10)
+    name_and_ids.generate()
 
-    # Crear tabla para los participantes
-    pdf.set_font("Arial", "", 10)
-    col_widths = [30, 80, 50,30]  # Anchuras de las columnas
-    header = ["ID", "Nombre", "WCA ID","Check"]  # Encabezados de las columnas
-    data = [header]  # Inicializar los datos con el encabezado
+    name_file = f"Names-{wcif['id']}.pdf"
 
-    for person in wcif["persons"]:
-        wca_id = person.get("wcaId") if person.get("wcaId") != None else ""
-        data.append([person["registrantId"], person["name"], wca_id," "])
-
-    data = sorted(data[1:], key=lambda x: x[0])
-
-    # Agregar la tabla al PDF
-    for row in data:
-        for col, width in zip(row, col_widths):
-            pdf.cell(width, 10, str(col), border=1, align="C")
-        pdf.ln()
-
-    pdf.output(f"/tmp/Names-{tournament_name}.pdf")
-
-    # Subir el archivo al almacenamiento S3
-    s3 = boto3.client("s3")
-    s3.upload_file(
-        f"/tmp/Names-{tournament_name}.pdf",
-        "avatars-images",
-        f"Names-{tournament_name}.pdf",
-    )
-
-    # Eliminar el archivo temporal
-    os.remove(f"/tmp/Names-{tournament_name}.pdf")
-
-    return f"{BASE}/Names-{tournament_name}.pdf"
+    return upload_to_s3(name_file=name_file, constructor=name_and_ids)
 
 
 def generate_csv(wcif):
@@ -272,7 +225,9 @@ def generate_csv(wcif):
 
     colums.extend(events)
 
-    with open(f"/tmp/Groups-{wcif['name']}.csv", "w", encoding="utf-8") as file:
+    name_file = f"Groups-{wcif['id']}.csv"
+
+    with open(f"/tmp/{name_file}", "w", encoding="utf-8") as file:
         file.write(";".join(colums) + "\n")
 
         for person in persons:
@@ -290,17 +245,7 @@ def generate_csv(wcif):
 
             file.write(";".join(map(str, row)) + "\n")
 
-    s3 = boto3.client("s3")
-
-    s3.upload_file(
-        f"/tmp/Groups-{wcif['name']}.csv",
-        "avatars-images",
-        f"Groups-{wcif['name']}.csv",
-    )
-
-    os.remove(f"/tmp/Groups-{wcif['name']}.csv")
-
-    return f"{BASE}/Groups-{wcif['name']}.csv"
+    return upload_to_s3(name_file=name_file)
 
 
 async def save_uploaded_file(upload_file: UploadFile) -> str:
@@ -341,9 +286,25 @@ def convert_to_watermark(input_image_path, output_image_path):
     result.save(output_image_path)
 
 
-@router.post("/generateScoresheet")
-async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(None)):
-    wcif = json.loads(wcif)
+# async def generate_all_files(wcif, image):
+#     tasks = [
+#         generate_scorecard(wcif, image),
+#         generate_pdf_groups(wcif),
+#         generate_name_and_id(wcif),
+#         generate_csv(wcif),
+#     ]
+
+#     results = await asyncio.gather(*tasks)
+#     return {
+#         "scoreCard": results[0]["scoreCard"],
+#         "emptyScoreCard": results[0]["emptyScoreCard"],
+#         "groupsPDF": results[1],
+#         "groupsCSV": results[2],
+#         "namesPDF": results[3],
+#     }
+
+
+async def generate_scorecard(wcif, image):
     tournament_id = wcif["id"]
     tournament_name = wcif["name"]
     lang = wcif["lang"]
@@ -357,7 +318,7 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
         image_path = await save_uploaded_file(image)
         convert_to_watermark(image_path, image_path)
 
-    scoresheet = SCORESHEET(
+    ScoreCardConstructor = ScoreCard(
         lang=lang,
         tournament_name=tournament_name,
         cuttof=cuttof,
@@ -376,7 +337,7 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
             if person_group == 0:
                 continue
 
-            scoresheet.add_competition_card(
+            ScoreCardConstructor.add_competition_card(
                 competitor_name=person["name"],
                 category=event_id,
                 group_num=person_group,
@@ -388,11 +349,9 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
 
             competitor_counter += 1
 
-    path_score_sheet = f"/tmp/{tournament_id}.pdf"
-    scoresheet.output(path_score_sheet)
+    scoreCard = f"{tournament_id}.pdf"
 
-    # Empty ScoreSheet
-    empty_pdf = SCORESHEET(
+    emptyScoreCardConstructor = ScoreCard(
         lang=lang,
         tournament_name=tournament_name,
         cuttof=cuttof,
@@ -403,7 +362,7 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
 
     for event in events:
         for i in range(4):
-            empty_pdf.add_competition_card(
+            emptyScoreCardConstructor.add_competition_card(
                 competitor_name="",
                 category=event["id"],
                 group_num=0,
@@ -413,31 +372,29 @@ async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(No
             )
             counter_empty += 1
 
-    path_empty_score_sheet = f"/tmp/Empty-ScoreCard-{tournament_name}.pdf"
-    empty_pdf.output(path_empty_score_sheet)
-
-    s3 = boto3.client("s3")
-
-    s3.upload_file(
-        path_score_sheet,
-        "avatars-images",
-        f"{tournament_id}.pdf",
-    )
-
-    s3.upload_file(
-        path_empty_score_sheet,
-        "avatars-images",
-        f"Empty-ScoreCard-{tournament_name}.pdf",
-    )
-
-    # Borrar archivos locales
-    os.remove(path_score_sheet)
-    os.remove(path_empty_score_sheet)
+    emptyScoreCard = f"Empty-ScoreCard-{tournament_id}.pdf"
 
     return {
-        "scoreCard": f"{BASE}/{tournament_id}.pdf",
-        "emptyScoreCard": f"{BASE}/Empty-ScoreCard-{tournament_name}.pdf",
-        "groupsPDF": generate_pdf_groups(wcif),
-        "groupsCSV": generate_csv(wcif),
-        "namesPDF": generate_name_and_id(wcif),
+        "scoreCard": upload_to_s3(scoreCard, ScoreCardConstructor),
+        "emptyScoreCard": upload_to_s3(emptyScoreCard, emptyScoreCardConstructor),
+    }
+
+
+@router.post("/generateScoresheet")
+async def generate_scoresheet(wcif: str = Form(...), image: UploadFile = File(None)):
+    wcif = json.loads(wcif)
+
+    scoreCards = await generate_scorecard(wcif, image)
+    scoreCard = scoreCards["scoreCard"]
+    emptyScoreCard = scoreCards["emptyScoreCard"]
+    groups = generate_pdf_groups(wcif)
+    names = generate_name_and_id(wcif)
+    csv = generate_csv(wcif)
+
+    return {
+        "scoreCard": scoreCard,
+        "emptyScoreCard": emptyScoreCard,
+        "groupsPDF": groups,
+        "groupsCSV": csv,
+        "namesPDF": names,
     }

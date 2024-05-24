@@ -1,4 +1,6 @@
-import json, os
+import json, os, boto3
+
+BASE = "https://avatars-images.s3.amazonaws.com"
 
 
 def centiseconds_to_minutes_seconds(centiseconds):
@@ -59,11 +61,25 @@ def load_translation(lang: str):
     return translations
 
 
-def tranlate_text(message_key: str, lang: str):
-    translations = load_translation(lang)
-    return translations.get(message_key, "No translation found for this key")
-
-
 def translate_text(message_key: str, lang: str):
     translations = load_translation(lang)
     return translations.get(message_key, "No translation found for this key")
+
+
+def upload_to_s3(name_file: str, constructor=None):
+
+    file_path = f"/tmp/{name_file}"
+
+    if constructor:
+        constructor.output(file_path)
+
+    s3_client = boto3.client("s3")
+
+    s3_client.upload_file(file_path, "avatars-images", name_file)
+
+    os.remove(file_path)
+
+    s3_path = f"{BASE}/{name_file}"
+    print(s3_path)
+
+    return s3_path
