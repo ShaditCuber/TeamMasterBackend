@@ -259,31 +259,48 @@ from PIL import Image
 
 
 def convert_to_watermark(input_image_path, output_image_path):
+    # devolver la imagen original con menos opacidad
 
-    # si viene jpg or jpeg convertir a png
-    if input_image_path.endswith(".jpg") or input_image_path.endswith(".jpeg"):
-        output_image_path = output_image_path.replace(".jpg", ".png")
-        output_image_path = output_image_path.replace(".jpeg", ".png")
+    image = Image.open(input_image_path).convert("RGBA")
 
-    # Abrir la imagen original
-    original = Image.open(input_image_path).convert("RGBA")
+    # Convert
+    r, g, b, a = image.split()
 
-    # Convertir a blanco y negro
-    grayscale = original.convert("L")
+    a = a.point(lambda p: int(p * 0.1))
 
-    # Crear una nueva imagen con canales RGBA (incluyendo alfa para la opacidad)
-    result = Image.new("RGBA", original.size, (255, 255, 255, 0))
+    # Recombinar los canales
+    image = Image.merge("RGBA", (r, g, b, a))
 
-    # Combinar la imagen en escala de grises con la imagen de alfa (opacidad)
-    for x in range(result.width):
-        for y in range(result.height):
-            gray = grayscale.getpixel((x, y))
-            result.putpixel(
-                (x, y), (gray, gray, gray, 40)
-            )  # 40 es el nivel de opacidad
+    # Guardar la nueva imagen
+    image.save(output_image_path)
 
-    # Guardar la imagen resultante
-    result.save(output_image_path)
+    return output_image_path
+
+
+# # si viene jpg or jpeg convertir a png
+# if input_image_path.endswith(".jpg") or input_image_path.endswith(".jpeg"):
+#     output_image_path = output_image_path.replace(".jpg", ".png")
+#     output_image_path = output_image_path.replace(".jpeg", ".png")
+
+# # Abrir la imagen original
+# original = Image.open(input_image_path).convert("RGBA")
+
+# # Convertir a blanco y negro
+# grayscale = original.convert("L")
+
+# # Crear una nueva imagen con canales RGBA (incluyendo alfa para la opacidad)
+# result = Image.new("RGBA", original.size, (255, 255, 255, 0))
+
+# # Combinar la imagen en escala de grises con la imagen de alfa (opacidad)
+# for x in range(result.width):
+#     for y in range(result.height):
+#         gray = grayscale.getpixel((x, y))
+#         result.putpixel(
+#             (x, y), (gray, gray, gray, 40)
+#         )  # 40 es el nivel de opacidad
+
+# # Guardar la imagen resultante
+# result.save(output_image_path)
 
 
 # async def generate_all_files(wcif, image):
