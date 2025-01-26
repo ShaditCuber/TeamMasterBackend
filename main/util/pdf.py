@@ -279,14 +279,17 @@ class ScoreCard(FPDF):
         if cuttof:
             cuttof = centiseconds_to_minutes_seconds(cuttof)
 
+        # Result column
+        # Result if
+
+        result_text = translate_text("result", self.lang)
+        if_text = translate_text("if", self.lang)
+        limit = limit if limit else ""
+
         column_titles = [
             "A",
             "S",
-            translate_text("result", self.lang)
-            + " DNF "
-            + translate_text("if", self.lang)
-            + " >= "
-            + limit,
+            result_text + " DNF " + if_text + " >= " + limit,
             "J",
             "C",
         ]  # Ajustamos los títulos
@@ -432,7 +435,7 @@ class NamesAndIds(FPDF):
         header = ["ID", "Nombre", "WCA ID", "Check"]
         data = [header]
 
-        for person in self.wcif['persons']:
+        for person in self.wcif["persons"]:
             wca_id = person.get("wcaId") if person.get("wcaId") != None else ""
             data.append([person["registrantId"], person["name"], wca_id, " "])
 

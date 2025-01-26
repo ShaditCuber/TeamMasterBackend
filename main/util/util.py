@@ -62,6 +62,10 @@ def load_translation(lang: str):
 
 
 def translate_text(message_key: str, lang: str):
+    if not lang:
+        lang = "es"
+    if not message_key:
+        return "No translation found for this key"
     translations = load_translation(lang)
     return translations.get(message_key, "No translation found for this key")
 

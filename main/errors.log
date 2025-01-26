@@ -1,0 +1,256 @@
+2025-01-25 21:48:04,504 - ERROR - Unhandled error: can only concatenate str (not "NoneType") to str
+2025-01-25 21:48:04,508 - ERROR - Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 97, in receive
+    return self.receive_nowait()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 92, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 159, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 112, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Escritorio\TeamMasterBackend\main\app.py", line 83, in global_error_handler
+    response = await call_next(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 165, in call_next
+    raise app_exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 758, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 778, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 299, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 79, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 74, in app
+    response = await func(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 387, in generate_scoresheet
+    scoreCards = await generate_scorecard(wcif, image)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 340, in generate_scorecard
+    ScoreCardConstructor.add_competition_card(
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 118, in add_competition_card
+    self._add_table(x, y, category, with_cuttof)
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 285, in _add_table
+    translate_text("result", self.lang)
+TypeError: can only concatenate str (not "NoneType") to str
+
+2025-01-25 22:21:34,634 - ERROR - Unhandled error: can only concatenate str (not "NoneType") to str
+2025-01-25 22:21:34,636 - ERROR - Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 97, in receive
+    return self.receive_nowait()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 92, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 159, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 112, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Escritorio\TeamMasterBackend\main\app.py", line 83, in global_error_handler
+    response = await call_next(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 165, in call_next
+    raise app_exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 758, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 778, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 299, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 79, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 74, in app
+    response = await func(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 387, in generate_scoresheet
+    scoreCards = await generate_scorecard(wcif, image)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 340, in generate_scorecard
+    ScoreCardConstructor.add_competition_card(
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 118, in add_competition_card
+    self._add_table(x, y, category, with_cuttof)
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 291, in _add_table
+    result_text + " DNF " + if_text + " >= " + limit,
+TypeError: can only concatenate str (not "NoneType") to str
+
+2025-01-25 22:23:04,736 - ERROR - Unhandled error: can only concatenate str (not "NoneType") to str
+2025-01-25 22:23:04,738 - ERROR - Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 97, in receive
+    return self.receive_nowait()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 92, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 159, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 112, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Escritorio\TeamMasterBackend\main\app.py", line 83, in global_error_handler
+    response = await call_next(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 165, in call_next
+    raise app_exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 758, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 778, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 299, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 79, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 74, in app
+    response = await func(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 387, in generate_scoresheet
+    scoreCards = await generate_scorecard(wcif, image)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 340, in generate_scorecard
+    ScoreCardConstructor.add_competition_card(
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 118, in add_competition_card
+    self._add_table(x, y, category, with_cuttof)
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 293, in _add_table
+    result_text + " DNF " + if_text + " >= " + limit,
+TypeError: can only concatenate str (not "NoneType") to str
+
+2025-01-25 22:25:19,101 - ERROR - Unhandled error: can only concatenate str (not "NoneType") to str
+2025-01-25 22:25:19,103 - ERROR - Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 97, in receive
+    return self.receive_nowait()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 92, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 159, in call_next
+    message = await recv_stream.receive()
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\anyio\streams\memory.py", line 112, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Escritorio\TeamMasterBackend\main\app.py", line 83, in global_error_handler
+    response = await call_next(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 165, in call_next
+    raise app_exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 758, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 778, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 299, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 79, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\starlette\routing.py", line 74, in app
+    response = await func(request)
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+  File "C:\Users\thesh\.virtualenvs\TeamMasterBackend-PuY5k4Nu\lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 387, in generate_scoresheet
+    scoreCards = await generate_scorecard(wcif, image)
+  File "C:\Escritorio\TeamMasterBackend\main\routes\groups.py", line 340, in generate_scorecard
+    ScoreCardConstructor.add_competition_card(
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 118, in add_competition_card
+    self._add_table(x, y, category, with_cuttof)
+  File "C:\Escritorio\TeamMasterBackend\main\util\pdf.py", line 292, in _add_table
+    result_text + " DNF " + if_text + " >= " + limit,
+TypeError: can only concatenate str (not "NoneType") to str
+

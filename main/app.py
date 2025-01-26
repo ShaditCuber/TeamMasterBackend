@@ -1,19 +1,23 @@
 import platform
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from mangum import Mangum
+import logging
+import traceback
 
-from routes import (
-    groups,
-    images
-)
+from routes import groups, images
 
 from auth.jwt_bearer import JWTBearer  # -> En caso de autenticacion
 
 IS_WINDOWS = platform.system() == "Windows"
 IS_LINUX = platform.system() == "Linux"
 IS_MACOS = platform.system() == "Darwin"
+logging.basicConfig(
+    level=logging.ERROR,
+    filename="errors.log",
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
 
 app = FastAPI()
 
@@ -71,6 +75,22 @@ async def validation_exception_handler(request, exc: Exception) -> JSONResponse:
         status_code=500,
         content={"message": str(exc)},
     )
+
+
+@app.middleware("http")
+async def global_error_handler(request: Request, call_next):
+    try:
+        response = await call_next(request)
+        return response
+    except Exception as e:
+        # Registro del error con su traza
+        logging.error(f"Unhandled error: {e}")
+        logging.error(traceback.format_exc())
+        # Retorno de un mensaje genérico para el cliente
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "An unexpected error occurred. Please try again later."},
+        )
 
 
 # Iniciar la aplicación
